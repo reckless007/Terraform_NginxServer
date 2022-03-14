@@ -47,7 +47,7 @@ resource "aws_instance" "myFirstInstance" {
   tags= {
     Name = "nginx_instance"
   }
-  user_data = <<EOF
+  user_data = <<-EOF
               #!/bin/bash
               sudo apt-get update -y
               sudo apt-get update -y
@@ -62,7 +62,7 @@ resource "aws_instance" "myFirstInstance" {
               sudo systemctl restart nginx
               chmod +x /home/ubuntu/flaskapp/script.sh
               gunicorn --chdir /home/ubuntu/flaskapp  app:app --daemon
-              EOF
+              EOF  
 }
 
 resource "aws_default_vpc" "default" {
