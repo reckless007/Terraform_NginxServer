@@ -47,28 +47,22 @@ resource "aws_instance" "myFirstInstance" {
   tags= {
     Name = "nginx_instance"
   }
-  connection {
-          type     = "ssh"
-          user     = "ec2-user"
-          private_key = file("/home/ec2-user/Nginx.pem")
-          host     = aws_instance.myFirstInstance.public_ip
-        }
-  provisioner "remote-exec" {
-          inline = [
-            "sudo apt-get update -y",
-            "sudo apt-get install python3 -y",
-            "sudo apt-get install python3-pip -y",
-            "sudo pip3 install flask",
-            "sudo apt-get install nginx -y",
-            "sudo apt-get install gunicorn -y",
-            "sudo rm -rf /etc/nginx/sites-enabled/default",
-            "git clone https://github.com/reckless007/PythonForm.git /home/ubuntu/flaskapp",
-            "sudo git clone https://github.com/reckless007/gunicorn.git /etc/nginx/sites-enabled/",
-            "sudo systemctl restart nginx",
-            "chmod +x /home/ubuntu/flaskapp/script.sh",
-            "gunicorn --chdir /home/ubuntu/flaskapp  app:app --daemon",
-          ]
-        }
+  user_data = <<EOF
+              #!/bin/bash
+              sudo apt-get update -y
+              sudo apt-get update -y
+              sudo apt-get install python3 -y
+              sudo apt-get install python3-pip -y
+              sudo pip3 install flask
+              sudo apt-get install nginx -y
+              sudo apt-get install gunicorn -y
+              sudo rm -rf /etc/nginx/sites-enabled/default
+              git clone https://github.com/reckless007/PythonForm.git /home/ubuntu/flaskapp
+              sudo git clone https://github.com/reckless007/gunicorn.git /etc/nginx/sites-enabled/
+              sudo systemctl restart nginx
+              chmod +x /home/ubuntu/flaskapp/script.sh
+              gunicorn --chdir /home/ubuntu/flaskapp  app:app --daemon
+              EOF
 }
 
 resource "aws_default_vpc" "default" {
