@@ -49,8 +49,8 @@ resource "aws_instance" "myFirstInstance" {
   }
   connection {
           type     = "ssh"
-          user     = "ubuntu"
-          private_key = file("C:/Users/91995/Downloads/Nginx.pem")
+          user     = "ec2-user"
+          private_key = file("/home/ec2-user/Nginx.pem")
           host     = aws_instance.myFirstInstance.public_ip
         }
   provisioner "remote-exec" {
